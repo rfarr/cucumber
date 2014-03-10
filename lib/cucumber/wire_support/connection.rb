@@ -52,6 +52,7 @@ module Cucumber
           @socket = UNIXSocket.new(@config.unix)
         else
           @socket = TCPSocket.new(@config.host, @config.port)
+          @socket.setsockopt(Socket::IPPROTO_TCP, Socket::TCP_NODELAY, 1)
         end
       rescue Errno::ECONNREFUSED => exception
         raise(ConnectionError, "Unable to contact the wire server at #{@config}. Is it up?")
